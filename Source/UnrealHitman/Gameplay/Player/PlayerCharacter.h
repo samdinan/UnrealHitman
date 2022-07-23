@@ -4,7 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "UnrealHitman/Gameplay/Equipment/GunObject.h"
 #include "PlayerCharacter.generated.h"
+
+UENUM()
+enum EPlayerStatus {
+	Legal,
+	Revealed,
+	Trespassing,
+};
 
 UCLASS()
 class UNREALHITMAN_API APlayerCharacter final : public ACharacter
@@ -29,6 +37,20 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category=Camera)
 	float AimBoomLength = 125.0f;
+
+	// Gun
+	UPROPERTY(EditDefaultsOnly, Category="Gun")
+	TSubclassOf<AGunObject> StartingGun;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sockets")
+	FName GunSocketName = "GunSocket";
+
+protected:
+	UPROPERTY(BlueprintReadWrite, Category="Gun")
+	AGunObject* CurrentGun;
+
+	UPROPERTY(EditDefaultsOnly, Category="Status")
+	TEnumAsByte<EPlayerStatus> Status;
 	
 // Functions
 public:
@@ -36,13 +58,27 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	TEnumAsByte<EPlayerStatus> GetStatus();
+
 protected:
 	virtual void BeginPlay() override;
 
-private:	
+	// Gun Stuff
+	UFUNCTION(BlueprintNativeEvent, Category="Gun")
+	void SetGun(TSubclassOf<AGunObject> GunRef);
+
 	// Input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+
+	void StartAim();
+	void EndAim();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Gun")
+	void StartShoot();
+
+	UFUNCTION(BlueprintNativeEvent, Category="CATEOGRY")
+	void EndShoot();
 
 };

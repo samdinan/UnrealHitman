@@ -15,6 +15,11 @@ UHealthComponent* ANpcCharacter::GetHealth()
 	return HealthComponent;
 }
 
+TEnumAsByte<EStatus> ANpcCharacter::GetStatus()
+{
+	return Status;
+}
+
 void ANpcCharacter::BeginPlay()
 {
 	Super::BeginPlay();

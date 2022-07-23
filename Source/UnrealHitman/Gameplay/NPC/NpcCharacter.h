@@ -7,6 +7,13 @@
 #include "UnrealHitman/Gameplay/Health/HealthComponent.h"
 #include "NpcCharacter.generated.h"
 
+UENUM()
+enum EStatus {
+	None,
+	Alive,
+	Dead
+};
+
 UCLASS()
 class UNREALHITMAN_API ANpcCharacter : public ACharacter
 {
@@ -15,13 +22,20 @@ class UNREALHITMAN_API ANpcCharacter : public ACharacter
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Health")
 	UHealthComponent* HealthComponent;
+
+protected:
+	UPROPERTY(BlueprintReadWrite, Category="Status")
+	TEnumAsByte<EStatus> Status;
 	
 public:
 	ANpcCharacter();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Health")
 	UHealthComponent* GetHealth();
 
+	UFUNCTION(BlueprintCallable, Category="Health")
+	TEnumAsByte<EStatus> GetStatus();
+	
 protected:
 	virtual void BeginPlay() override;
 

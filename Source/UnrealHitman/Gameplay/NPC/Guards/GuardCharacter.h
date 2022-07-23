@@ -43,4 +43,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Patrol")
 	void AdvancePatrol();
+
+	
 };

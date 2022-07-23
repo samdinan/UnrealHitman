@@ -28,8 +28,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// UHealthComponent();
-
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Health")
+	bool IsAlive();
+	
 	UFUNCTION(BlueprintCallable, Category="Health")
 	int GetCurrentHealth();
 
