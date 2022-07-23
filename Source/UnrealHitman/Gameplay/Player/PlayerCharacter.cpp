@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UnrealHitman/Gameplay/Security/SecurityVolume.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -19,6 +20,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); 
 	FollowCamera->bUsePawnControlRotation = false;
+
+	Security = CreateDefaultSubobject<USecurityComponent>("Security");
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +37,17 @@ void APlayerCharacter::BeginPlay()
 	}
 }
 
+void APlayerCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	if(OtherActor->ActorHasTag(SecurityTag))
+	{
+		ASecurityVolume* SecurityVolume = (ASecurityVolume*)OtherActor;
+		Security->EnterSecurityVolume(SecurityVolume);
+	}
+}
+
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
@@ -42,7 +56,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 TEnumAsByte<EPlayerStatus> APlayerCharacter::GetStatus()
 {
-	return Status;
+	if(Security->IsTrespassing())
+	{
+		return Trespassing;
+	}
+
+	return Legal;
 }
 
 // Called to bind functionality to input

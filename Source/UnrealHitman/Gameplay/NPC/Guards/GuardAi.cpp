@@ -53,7 +53,7 @@ void AGuardAi::OnHearingUpdated(AActor* Actor, FAIStimulus Stimulus)
 
 void AGuardAi::UpdateSight(float DeltaSeconds)
 {
-	if(CanSeePlayer)
+	if(CanSeePlayer && PlayerCharacter->GetStatus() != Legal)
 	{
 		const FVector PlayerLocation = PlayerCharacter->GetActorLocation();
 		

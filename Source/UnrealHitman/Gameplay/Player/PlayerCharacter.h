@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "UnrealHitman/Gameplay/Equipment/GunObject.h"
+#include "UnrealHitman/Gameplay/Security/SecurityComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UENUM()
@@ -51,6 +52,13 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Status")
 	TEnumAsByte<EPlayerStatus> Status;
+
+	// Security
+	UPROPERTY(EditDefaultsOnly, Category="Security")
+	USecurityComponent* Security;
+
+	UPROPERTY(EditDefaultsOnly, Category="Security")
+	FName SecurityTag;
 	
 // Functions
 public:
@@ -62,6 +70,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	// Gun Stuff
 	UFUNCTION(BlueprintNativeEvent, Category="Gun")
@@ -78,7 +87,7 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, Category="Gun")
 	void StartShoot();
 
-	UFUNCTION(BlueprintNativeEvent, Category="CATEOGRY")
+	UFUNCTION(BlueprintNativeEvent, Category="Gun")
 	void EndShoot();
 
 };

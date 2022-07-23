@@ -9,7 +9,6 @@
 
 UENUM()
 enum EStatus {
-	None,
 	Alive,
 	Dead
 };
